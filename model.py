@@ -34,10 +34,13 @@ if __name__ == '__main__':
 
     model = timm.create_model("vgg19.tv_in1k",pretrained=True)
     model = model.eval()
-
+    model.reset_classifier(0)
     # get model specific transforms (normalization, resize)
     data_config = timm.data.resolve_model_data_config(model)
     transforms = timm.data.create_transform(**data_config, is_training=False)
 
-    final_classify=predict(img,model,transforms)
-    print(final_classify)
+    output = model(transforms(img).unsqueeze(0))  # unsqueeze single image into batch of 1
+
+
+    # final_classify=predict(img,model,transforms)
+    # print(final_classify)
